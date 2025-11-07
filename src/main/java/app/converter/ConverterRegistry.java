@@ -1,23 +1,27 @@
 package app.converter;
 
+import app.enums.MimeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class ConverterRegistry {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterRegistry.class);
     private final List<FileConverter> converters = new ArrayList<>();
 
     public ConverterRegistry() {
-        registerConverter(new Mp4ToMp3Converter());
+        LOGGER.info("Inizializzazione del registro dei convertitori di file");
+        converters.add(new Mp4ToMp3Converter());
     }
 
-    public void registerConverter(FileConverter converter) {
-        converters.add(converter);
-    }
-
-    public Optional<FileConverter> getConverter(String inputType, String outputType) {
+    public Optional<FileConverter> getConverter(MimeType input, MimeType output) {
+        LOGGER.info("Ricerca del convertitore per tipi MIME di input: {} e output: {}", input, output);
         return converters.stream()
-                .filter(c -> c.canConvert(inputType, outputType))
+                .filter(c -> c.getInputMimeType() == input && c.getOutputMimeType() == output)
                 .findFirst();
     }
 
