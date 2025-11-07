@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+
+<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.ConverterController"
+          hgap="10" vgap="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    <Label text="File da convertire:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="sourceFilePath" GridPane.rowIndex="0" GridPane.columnIndex="1" editable="false"/>
+    <Button text="Sfoglia..." onAction="#selectSourceFile" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+
+    <Label text="Cartella destinazione:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="destFolderPath" GridPane.rowIndex="1" GridPane.columnIndex="1" editable="false"/>
+    <Button text="Sfoglia..." onAction="#selectDestFolder" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+    <Label text="Nome file output:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="outputFileName" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    <Label text="Tipo conversione:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <ChoiceBox fx:id="outputTypeChoice" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <HBox spacing="10" GridPane.rowIndex="4" GridPane.columnIndex="1">
+        <padding>
+            <Insets top="10"/>
+        </padding>
+        <Button text="Converti" onAction="#performConversion"/>
+    </HBox>
+
+</GridPane>
