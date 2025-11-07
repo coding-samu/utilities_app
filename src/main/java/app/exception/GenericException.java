@@ -1,6 +1,6 @@
 package app.exception;
 
-public class GenericException extends RuntimeException {
+public class GenericException extends Exception {
     public GenericException(String message) {
         super(message);
     }
