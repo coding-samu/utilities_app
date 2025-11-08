@@ -65,14 +65,11 @@ public class Mp4ToWavConverter implements FileConverter {
             while ((frame = grabber.grabSamples()) != null) {
                 recorder.recordSamples(frame.samples);
             }
-
-            // Conversion logic complete
-
+            LOGGER.info("Conversione completata con successo: {}", dest.getAbsolutePath());
         } catch (Exception e) {
             LOGGER.error("Errore durante la conversione: {}", e.getMessage());
             throw new ConversionErrorException("Errore durante la conversione: " + e.getMessage());
         } finally {
-            // Ensure resources are properly stopped and released
             if (recorder != null) {
                 try {
                     recorder.stop();
