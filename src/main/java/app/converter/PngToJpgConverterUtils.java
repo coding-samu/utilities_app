@@ -50,7 +50,7 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             recorder = new FFmpegFrameRecorder(dest, imageWidth, imageHeight);
             recorder.setFormat("jpeg");
             recorder.setVideoCodecName("mjpeg");
-            int quality = (int) options.getOrDefault("quality", 100);
+            int quality = (int) options.getOrDefault("quality", 0);
             if (quality < 1) {
                 quality = 1;
             }
@@ -61,9 +61,12 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             recorder.start();
 
             Frame frame = grabber.grabImage();
-            if (frame != null) {
-                recorder.record(frame);
+
+            if (frame == null) {
+                LOGGER.error("Il file sorgente non contiene dati immagine validi (frame nullo): {}", source.getAbsolutePath());
+                throw new ConversionErrorException("Il file sorgente non contiene dati immagine validi (frame nullo): " + source.getAbsolutePath());
             }
+            recorder.record(frame);
 
             LOGGER.info("Conversione completata con successo: {}", dest.getAbsolutePath());
         } catch (Exception e) {
