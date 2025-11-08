@@ -16,6 +16,7 @@ public class ConverterRegistry {
     public ConverterRegistry() {
         LOGGER.info("Inizializzazione del registro dei convertitori di file");
         converters.add(new Mp4ToMp3Converter());
+        converters.add(new Mp4ToWavConverter());
     }
 
     public Optional<FileConverter> getConverter(MimeType input, MimeType output) {
