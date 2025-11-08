@@ -40,8 +40,8 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             grabber = new FFmpegFrameGrabber(source);
             grabber.start();
 
-            int imageWidth = grabber.getImageWidth();
-            int imageHeight = grabber.getImageHeight();
+            int imageWidth = (int) options.getOrDefault("imageWidth", grabber.getImageWidth());
+            int imageHeight = (int) options.getOrDefault("imageHeight", grabber.getImageHeight());
             if (imageWidth <= 0 || imageHeight <= 0) {
                 LOGGER.error("Il file sorgente non contiene dati immagine validi: {}", source.getAbsolutePath());
                 throw new ConversionErrorException("Il file sorgente non contiene dati immagine validi: " + source.getAbsolutePath());
