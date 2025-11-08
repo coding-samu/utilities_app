@@ -51,8 +51,8 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             recorder.setFormat("jpeg");
             recorder.setVideoCodecName("mjpeg");
             int quality = (int) options.getOrDefault("quality", 0);
-            if (quality < 1) {
-                quality = 1;
+            if (quality < 0) {
+                quality = 0;
             }
             if (quality > 100) {
                 quality = 100;
