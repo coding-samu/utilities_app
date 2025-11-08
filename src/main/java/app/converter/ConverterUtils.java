@@ -5,9 +5,9 @@ import org.bytedeco.javacv.FFmpegFrameRecorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class VideoToAudioConverter {
+public abstract class ConverterUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VideoToAudioConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConverterUtils.class);
 
     protected static void releaseRecorderAndGrabber(FFmpegFrameRecorder recorder, FFmpegFrameGrabber grabber) {
         if (recorder != null) {
