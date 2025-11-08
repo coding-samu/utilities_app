@@ -65,10 +65,7 @@ public class Mp4ToMp3Converter extends VideoToAudioConverter implements FileConv
             while ((frame = grabber.grabSamples()) != null) {
                 recorder.recordSamples(frame.samples);
             }
-
-            recorder.stop();
-            grabber.stop();
-
+            LOGGER.info("Conversione completata con successo: {}", dest.getAbsolutePath());
         } catch (Exception e) {
             LOGGER.error("Errore durante la conversione: {}", e.getMessage());
             throw new ConversionErrorException("Errore durante la conversione: " + e.getMessage());
