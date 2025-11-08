@@ -50,10 +50,18 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             recorder = new FFmpegFrameRecorder(dest, imageWidth, imageHeight);
             recorder.setFormat("jpeg");
             recorder.setVideoCodecName("mjpeg");
+            int quality = (int) options.getOrDefault("quality", 100);
+            if (quality < 1) {
+                quality = 1;
+            }
+            if (quality > 100) {
+                quality = 100;
+            }
+            recorder.setVideoQuality(quality);
             recorder.start();
 
-            Frame frame;
-            while ((frame = grabber.grabImage()) != null) {
+            Frame frame = grabber.grabImage();
+            if (frame != null) {
                 recorder.record(frame);
             }
 
