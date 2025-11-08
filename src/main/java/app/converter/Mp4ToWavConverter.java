@@ -66,23 +66,36 @@ public class Mp4ToWavConverter implements FileConverter {
                 recorder.recordSamples(frame.samples);
             }
 
-            recorder.stop();
-            grabber.stop();
+            // Conversion logic complete
 
         } catch (Exception e) {
             LOGGER.error("Errore durante la conversione: {}", e.getMessage());
             throw new ConversionErrorException("Errore durante la conversione: " + e.getMessage());
         } finally {
-            try {
-                if (grabber != null) {
-                    grabber.release();
+            // Ensure resources are properly stopped and released
+            if (recorder != null) {
+                try {
+                    recorder.stop();
+                } catch (Exception e) {
+                    LOGGER.warn("Errore durante la chiusura del recorder: {}", e.getMessage());
                 }
-
-                if (recorder != null) {
+                try {
                     recorder.release();
+                } catch (Exception e) {
+                    LOGGER.warn("Errore durante il rilascio del recorder: {}", e.getMessage());
                 }
-            } catch (Exception ignored) {
-
+            }
+            if (grabber != null) {
+                try {
+                    grabber.stop();
+                } catch (Exception e) {
+                    LOGGER.warn("Errore durante la chiusura del grabber: {}", e.getMessage());
+                }
+                try {
+                    grabber.release();
+                } catch (Exception e) {
+                    LOGGER.warn("Errore durante il rilascio del grabber: {}", e.getMessage());
+                }
             }
         }
     }
