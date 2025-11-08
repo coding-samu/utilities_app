@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Map;
 
-public class Mp4ToWavConverter implements FileConverter {
+public class Mp4ToWavConverter extends VideoToAudioConverter implements FileConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Mp4ToWavConverter.class);
     private static final int DEFAULT_AUDIO_BITRATE = 192_000;
@@ -70,30 +70,7 @@ public class Mp4ToWavConverter implements FileConverter {
             LOGGER.error("Errore durante la conversione: {}", e.getMessage());
             throw new ConversionErrorException("Errore durante la conversione: " + e.getMessage());
         } finally {
-            if (recorder != null) {
-                try {
-                    recorder.stop();
-                } catch (Exception e) {
-                    LOGGER.warn("Errore durante la chiusura del recorder: {}", e.getMessage());
-                }
-                try {
-                    recorder.release();
-                } catch (Exception e) {
-                    LOGGER.warn("Errore durante il rilascio del recorder: {}", e.getMessage());
-                }
-            }
-            if (grabber != null) {
-                try {
-                    grabber.stop();
-                } catch (Exception e) {
-                    LOGGER.warn("Errore durante la chiusura del grabber: {}", e.getMessage());
-                }
-                try {
-                    grabber.release();
-                } catch (Exception e) {
-                    LOGGER.warn("Errore durante il rilascio del grabber: {}", e.getMessage());
-                }
-            }
+            releaseRecorderAndGrabber(recorder, grabber);
         }
     }
 }

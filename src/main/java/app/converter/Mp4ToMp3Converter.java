@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Map;
 
-public class Mp4ToMp3Converter implements FileConverter {
+public class Mp4ToMp3Converter extends VideoToAudioConverter implements FileConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Mp4ToMp3Converter.class);
     private static final int DEFAULT_AUDIO_BITRATE = 192_000;
@@ -73,17 +73,7 @@ public class Mp4ToMp3Converter implements FileConverter {
             LOGGER.error("Errore durante la conversione: {}", e.getMessage());
             throw new ConversionErrorException("Errore durante la conversione: " + e.getMessage());
         } finally {
-            try {
-                if (grabber != null) {
-                    grabber.release();
-                }
-
-                if (recorder != null) {
-                    recorder.release();
-                }
-            } catch (Exception ignored) {
-
-            }
+            releaseRecorderAndGrabber(recorder, grabber);
         }
     }
 }
