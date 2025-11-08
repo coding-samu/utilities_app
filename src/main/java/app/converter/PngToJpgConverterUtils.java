@@ -40,6 +40,11 @@ public class PngToJpgConverterUtils extends ConverterUtils implements FileConver
             grabber = new FFmpegFrameGrabber(source);
             grabber.start();
 
+            if (grabber.getLengthInFrames() > 1) {
+                LOGGER.error("Il file PNG è animato e non è supportato: {}", source.getAbsolutePath());
+                throw new ConversionErrorException("Il file PNG è animato e non è supportato: " + source.getAbsolutePath());
+            }
+
             int imageWidth = (int) options.getOrDefault("imageWidth", grabber.getImageWidth());
             int imageHeight = (int) options.getOrDefault("imageHeight", grabber.getImageHeight());
             if (imageWidth <= 0 || imageHeight <= 0) {
