@@ -18,6 +18,8 @@ public class ConverterRegistry {
         converters.add(new Mp4ToMp3ConverterUtils());
         converters.add(new Mp4ToWavConverterUtils());
         converters.add(new PngToJpgConverterUtils());
+        converters.add(new JasperToJrxmlConverterUtils());
+        LOGGER.info("Registro dei convertitori inizializzato con {} convertitori", converters.size());
     }
 
     public Optional<FileConverter> getConverter(MimeType input, MimeType output) {

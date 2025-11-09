@@ -72,7 +72,8 @@ public class ConverterController extends GenericController {
             sourceFile = file;
             sourceFilePath.setText(file.getAbsolutePath());
 
-            MimeType inputType = MimeType.fromString(guessMimeType(sourceFile));
+            String sourceMimeType = guessMimeType(sourceFile);
+            MimeType inputType = MimeType.fromString(sourceMimeType);
             List<String> availableOutputs = new ArrayList<>();
             for (FileConverter c : converterRegistry.getAllConverters()) {
                 if (c.getInputMimeType().equals(inputType)) {
@@ -142,10 +143,29 @@ public class ConverterController extends GenericController {
         Tika tika = new Tika();
         try {
             LOGGER.info("Rilevamento del tipo MIME per il file: {}", file.getAbsolutePath());
-            return tika.detect(file);
+            String mimeType = tika.detect(file);
+            if ("application/octet-stream".equals(mimeType)) {
+                mimeType = specialMimeTypeCheck(file);
+            }
+            return mimeType;
         } catch (IOException e) {
             LOGGER.error("Errore nel rilevamento del tipo MIME: {}", e.getMessage());
             throw new ConversionErrorException("Errore nel rilevamento del tipo MIME: " + e.getMessage());
         }
+    }
+
+    private String specialMimeTypeCheck(File sourceFile) throws ConversionErrorException {
+        String name = sourceFile.getName().toLowerCase();
+        String[] splits = name.split("\\.");
+        int i = splits.length - 1;
+        if (splits.length < 2 || splits[splits.length - 1].isEmpty()) {
+            throw new ConversionErrorException("Il file non ha un'estensione valida: " + sourceFile.getAbsolutePath());
+        }
+        return switch (splits[i]) {
+            case "jasper" -> "application/x-jasper";
+            case "jrxml" -> "application/jasper-jrxml";
+            default ->
+                    throw new ConversionErrorException("Tipo MIME non riconosciuto per il file: " + sourceFile.getAbsolutePath());
+        };
     }
 }
