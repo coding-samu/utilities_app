@@ -7,7 +7,9 @@ public enum MimeType {
     AUDIO_MP3("audio/mpeg", ".mp3"),
     AUDIO_WAV("audio/wav", ".wav"),
     IMAGE_PNG("image/png", ".png"),
-    IMAGE_JPEG("image/jpeg", ".jpg");
+    IMAGE_JPEG("image/jpeg", ".jpg"),
+    JASPER_JRXML("application/jasper-jrxml", ".jrxml"),
+    JASPER_COMPILED("application/x-jasper", ".jasper");
 
     private final String value;
     private final String extension;
