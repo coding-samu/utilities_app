@@ -158,6 +158,9 @@ public class ConverterController extends GenericController {
         String name = sourceFile.getName().toLowerCase();
         String[] splits = name.split("\\.");
         int i = splits.length - 1;
+        if (splits.length < 2 || splits[splits.length - 1].isEmpty()) {
+            throw new ConversionErrorException("Il file non ha un'estensione valida: " + sourceFile.getAbsolutePath());
+        }
         return switch (splits[i]) {
             case "jasper" -> "application/x-jasper";
             case "jrxml" -> "application/jasper-jrxml";

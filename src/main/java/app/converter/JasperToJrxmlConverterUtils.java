@@ -41,8 +41,11 @@ public class JasperToJrxmlConverterUtils extends ConverterUtils implements FileC
                 }
             }
 
-            JasperReport report = (JasperReport)
-                    JRLoader.loadObject(source);
+            Object loadedObject = JRLoader.loadObject(source);
+            if (!(loadedObject instanceof JasperReport report)) {
+                LOGGER.error("Il file {} non contiene un oggetto JasperReport valido.", source.getAbsolutePath());
+                throw new ConversionErrorException("Il file " + source.getAbsolutePath() + " non contiene un oggetto JasperReport valido.");
+            }
 
             String jrxmlPath = dest.getAbsolutePath();
             JRXmlWriter.writeReport(report, jrxmlPath, "UTF-8");
