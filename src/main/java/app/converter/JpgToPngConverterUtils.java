@@ -2,8 +2,11 @@ package app.converter;
 
 import app.enums.MimeType;
 import app.exception.ConversionErrorException;
+import org.bytedeco.ffmpeg.global.avcodec;
+import org.bytedeco.ffmpeg.global.avutil;
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
+import org.bytedeco.javacv.FFmpegLogCallback;
 import org.bytedeco.javacv.Frame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +36,7 @@ public class JpgToPngConverterUtils extends ConverterUtils implements FileConver
             throw new ConversionErrorException("File sorgente non trovato: " + source.getAbsolutePath());
         }
 
+        FFmpegLogCallback.set();
         FFmpegFrameGrabber grabber = null;
         FFmpegFrameRecorder recorder = null;
 
@@ -54,7 +58,9 @@ public class JpgToPngConverterUtils extends ConverterUtils implements FileConver
 
             recorder = new FFmpegFrameRecorder(dest, imageWidth, imageHeight);
             recorder.setFormat("png");
-            recorder.setVideoCodecName("png");
+            recorder.setVideoCodec(avcodec.AV_CODEC_ID_PNG);
+            recorder.setPixelFormat(avutil.AV_PIX_FMT_RGBA);
+            recorder.setAudioChannels(0);
             int quality = (int) options.getOrDefault("quality", 0);
             if (quality < 0) {
                 quality = 0;
@@ -63,6 +69,7 @@ public class JpgToPngConverterUtils extends ConverterUtils implements FileConver
                 quality = 100;
             }
             recorder.setVideoQuality(quality);
+            recorder.setFrameRate(1);
             recorder.start();
 
             Frame frame = grabber.grabImage();
