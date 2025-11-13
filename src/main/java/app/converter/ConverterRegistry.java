@@ -22,6 +22,7 @@ public class ConverterRegistry {
         converters.add(new PngToJpgConverterUtils());
         converters.add(new JpgToPngConverterUtils());
         converters.add(new JasperToJrxmlConverterUtils());
+        converters.add(new WavToMp3ConverterUtils());
         LOGGER.info("Registro dei convertitori inizializzato con {} convertitori", converters.size());
     }
 

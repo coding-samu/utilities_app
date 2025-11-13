@@ -2,6 +2,10 @@ package app.enums;
 
 import app.exception.ConversionErrorException;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 public enum MimeType {
     VIDEO_MP4("video/mp4", ".mp4"),
     VIDEO_MKV("video/x-matroska", ".mkv"),
@@ -14,6 +18,21 @@ public enum MimeType {
 
     private final String value;
     private final String extension;
+
+    private static final Map<String, MimeType> MIME_LOOKUP = new HashMap<>();
+
+    static {
+        // Primary MIME types
+        for (MimeType mimeType : values()) {
+            MIME_LOOKUP.put(mimeType.value.toLowerCase(Locale.ROOT), mimeType);
+        }
+        
+        // WAV file aliases - Apache Tika and different systems may return various MIME types for WAV
+        MIME_LOOKUP.put("audio/vnd.wave", AUDIO_WAV);
+        MIME_LOOKUP.put("audio/x-wav", AUDIO_WAV);
+        MIME_LOOKUP.put("audio/wave", AUDIO_WAV);
+        MIME_LOOKUP.put("audio/x-pn-wav", AUDIO_WAV);
+    }
 
     MimeType(String value, String extension) {
         this.value = value;
@@ -29,12 +48,18 @@ public enum MimeType {
     }
 
     public static MimeType fromString(String mime) throws ConversionErrorException {
-        for (MimeType m : values()) {
-            if (m.value.equalsIgnoreCase(mime)) {
-                return m;
-            }
+        if (mime == null || mime.trim().isEmpty()) {
+            throw new ConversionErrorException("Tipo MIME null o vuoto");
         }
-        throw new ConversionErrorException("Tipo MIME non supportato: " + mime);
+        
+        String normalizedMime = mime.trim().toLowerCase(Locale.ROOT);
+        MimeType mimeType = MIME_LOOKUP.get(normalizedMime);
+        
+        if (mimeType == null) {
+            throw new ConversionErrorException("Tipo MIME non supportato: " + mime);
+        }
+        
+        return mimeType;
     }
 
     @Override
