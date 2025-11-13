@@ -61,7 +61,7 @@ public class ConverterController extends GenericController {
     }
 
     @FXML
-    public void selectSourceFile(ActionEvent event) throws GenericException {
+    public void selectSourceFile(ActionEvent event) {
         LOGGER.info("Apertura del file chooser per selezionare il file sorgente");
         FileChooser fileChooser = new FileChooser();
         if (sourceFile != null) {
@@ -69,18 +69,30 @@ public class ConverterController extends GenericController {
         }
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
-            sourceFile = file;
-            sourceFilePath.setText(file.getAbsolutePath());
+            try {
+                sourceFile = file;
+                sourceFilePath.setText(file.getAbsolutePath());
 
-            String sourceMimeType = guessMimeType(sourceFile);
-            MimeType inputType = MimeType.fromString(sourceMimeType);
-            List<String> availableOutputs = new ArrayList<>();
-            for (FileConverter c : converterRegistry.getAllConverters()) {
-                if (c.getInputMimeType().equals(inputType)) {
-                    availableOutputs.add(c.getOutputMimeType().toString());
+                String sourceMimeType = guessMimeType(sourceFile);
+                MimeType inputType = MimeType.fromString(sourceMimeType);
+                List<String> availableOutputs = new ArrayList<>();
+                for (FileConverter c : converterRegistry.getAllConverters()) {
+                    if (c.getInputMimeType().equals(inputType)) {
+                        availableOutputs.add(c.getOutputMimeType().toString());
+                    }
                 }
+                outputTypeChoice.setItems(FXCollections.observableArrayList(availableOutputs));
+            } catch (ConversionErrorException e) {
+                LOGGER.error("Errore durante la selezione del file: {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Formato non supportato", e.getMessage());
+                sourceFile = null;
+                sourceFilePath.clear();
+            } catch (Exception e) {
+                LOGGER.error("Errore imprevisto durante la selezione del file: {}", e.getMessage());
+                showAlert(Alert.AlertType.ERROR, "Errore", "Si è verificato un errore durante la selezione del file:\n" + e.getMessage());
+                sourceFile = null;
+                sourceFilePath.clear();
             }
-            outputTypeChoice.setItems(FXCollections.observableArrayList(availableOutputs));
         }
     }
 
