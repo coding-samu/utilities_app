@@ -16,9 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+/**
+ * Controller for video downloader utility.
+ */
 public class VideoDownloaderController extends GenericController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VideoDownloaderController.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(VideoDownloaderController.class);
 
     @FXML
     private TextField videoUrl;
@@ -37,15 +41,24 @@ public class VideoDownloaderController extends GenericController {
 
     private File destFolder;
 
+    /**
+     * Initialize the controller.
+     */
     @FXML
     public void initialize() {
         LOGGER.info("Inizializzazione del controller di download video");
         downloadProgress.setProgress(0);
     }
 
+    /**
+     * Open directory chooser to select destination folder.
+     *
+     * @param event the action event
+     */
     @FXML
-    public void selectDestFolder(ActionEvent event) {
-        LOGGER.info("Apertura del directory chooser per selezionare la cartella di destinazione");
+    public void selectDestFolder(final ActionEvent event) {
+        LOGGER.info("Apertura del directory chooser per "
+                + "selezionare la cartella di destinazione");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         if (destFolder != null) {
             directoryChooser.setInitialDirectory(destFolder);
@@ -57,37 +70,47 @@ public class VideoDownloaderController extends GenericController {
         }
     }
 
+    /**
+     * Perform video download.
+     *
+     * @param event the action event
+     */
     @FXML
-    public void performDownload(ActionEvent event) {
+    public void performDownload(final ActionEvent event) {
         LOGGER.info("Avvio del processo di download del video");
 
         String url = videoUrl.getText();
         String fileName = outputFileName.getText();
 
         if (url == null || url.trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Per favore, inserisci l'URL del video.");
+            showAlert(Alert.AlertType.WARNING, "Attenzione",
+                    "Per favore, inserisci l'URL del video.");
             return;
         }
 
         if (destFolder == null) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Per favore, seleziona la cartella di destinazione.");
+            showAlert(Alert.AlertType.WARNING, "Attenzione",
+                    "Per favore, seleziona la cartella di destinazione.");
             return;
         }
 
         if (fileName == null || fileName.trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Per favore, inserisci il nome del file di output.");
+            showAlert(Alert.AlertType.WARNING, "Attenzione",
+                    "Per favore, inserisci il nome del file di output.");
             return;
         }
 
         // Ensure the filename has a video extension
-        if (!fileName.toLowerCase().matches(".*\\.(mp4|avi|mkv|mov|wmv|flv|webm)$")) {
+        if (!fileName.toLowerCase()
+                .matches(".*\\.(mp4|avi|mkv|mov|wmv|flv|webm)$")) {
             fileName += ".mp4";
         }
 
         File outputFile = new File(destFolder, fileName);
 
         if (outputFile.exists()) {
-            showAlert(Alert.AlertType.WARNING, "Attenzione", "Il file esiste già. Scegli un nome diverso.");
+            showAlert(Alert.AlertType.WARNING, "Attenzione",
+                    "Il file esiste già. Scegli un nome diverso.");
             return;
         }
 
@@ -100,13 +123,16 @@ public class VideoDownloaderController extends GenericController {
         Thread downloadThread = new Thread(() -> {
             try {
                 VideoDownloader downloader = new VideoDownloader();
-                downloader.downloadVideo(url, outputFile, (bytesDownloaded, totalBytes) -> {
-                    double progress = totalBytes > 0 ? (double) bytesDownloaded / totalBytes : -1;
+                downloader.downloadVideo(url, outputFile,
+                        (bytesDownloaded, totalBytes) -> {
+                    double progress = totalBytes > 0
+                            ? (double) bytesDownloaded / totalBytes : -1;
                     Platform.runLater(() -> {
                         if (progress >= 0) {
                             downloadProgress.setProgress(progress);
                         } else {
-                            downloadProgress.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                            downloadProgress.setProgress(
+                                    ProgressBar.INDETERMINATE_PROGRESS);
                         }
                     });
                 });
@@ -114,17 +140,23 @@ public class VideoDownloaderController extends GenericController {
                 Platform.runLater(() -> {
                     downloadProgress.setProgress(1.0);
                     downloadButton.setDisable(false);
-                    LOGGER.info("Download completato con successo: {}", outputFile.getAbsolutePath());
-                    showAlert(Alert.AlertType.INFORMATION, "Download completato",
-                            "Video scaricato con successo!\n\nSalvato in:\n" + outputFile.getAbsolutePath());
+                    LOGGER.info("Download completato con successo: {}",
+                            outputFile.getAbsolutePath());
+                    showAlert(Alert.AlertType.INFORMATION,
+                            "Download completato",
+                            "Video scaricato con successo!\n\n"
+                                    + "Salvato in:\n"
+                                    + outputFile.getAbsolutePath());
                 });
 
             } catch (GenericException e) {
                 Platform.runLater(() -> {
                     downloadButton.setDisable(false);
                     downloadProgress.setProgress(0);
-                    LOGGER.error("Errore durante il download: {}", e.getMessage());
-                    showAlert(Alert.AlertType.ERROR, "Errore di download", e.getMessage());
+                    LOGGER.error("Errore durante il download: {}",
+                            e.getMessage());
+                    showAlert(Alert.AlertType.ERROR,
+                            "Errore di download", e.getMessage());
                 });
             } catch (Exception e) {
                 Platform.runLater(() -> {
@@ -132,7 +164,8 @@ public class VideoDownloaderController extends GenericController {
                     downloadProgress.setProgress(0);
                     LOGGER.error("Errore imprevisto: {}", e.getMessage());
                     showAlert(Alert.AlertType.ERROR, "Errore imprevisto",
-                            "Si è verificato un errore imprevisto:\n" + e.getMessage());
+                            "Si è verificato un errore imprevisto:\n"
+                                    + e.getMessage());
                 });
             }
         });
