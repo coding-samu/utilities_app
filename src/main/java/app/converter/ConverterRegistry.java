@@ -19,6 +19,7 @@ public class ConverterRegistry {
         converters.add(new Mp4ToWavConverterUtils());
         converters.add(new MkvToMp4ConverterUtils());
         converters.add(new PngToJpgConverterUtils());
+        converters.add(new JpgToPngConverterUtils());
         converters.add(new JasperToJrxmlConverterUtils());
         LOGGER.info("Registro dei convertitori inizializzato con {} convertitori", converters.size());
     }
