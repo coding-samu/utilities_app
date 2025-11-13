@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="app.controller.VideoDownloaderController" spacing="10">
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="URL del video:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="videoUrl" GridPane.rowIndex="0" GridPane.columnIndex="1" 
+                   promptText="Inserisci l'URL del video (es. URL diretto .mp4, .avi, ecc.)" 
+                   prefWidth="400"/>
+        
+        <Label text="Cartella destinazione:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="destFolderPath" GridPane.rowIndex="1" GridPane.columnIndex="1" 
+                   editable="false" prefWidth="400"/>
+        <Button text="Sfoglia..." onAction="#selectDestFolder" 
+                GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        
+        <Label text="Nome file output:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="outputFileName" GridPane.rowIndex="2" GridPane.columnIndex="1" 
+                   promptText="Nome del file (es. video.mp4)" prefWidth="400"/>
+    </GridPane>
+    
+    <Label text="Progresso download:"/>
+    <ProgressBar fx:id="downloadProgress" prefWidth="520" prefHeight="20"/>
+    
+    <HBox spacing="10">
+        <padding>
+            <Insets top="10"/>
+        </padding>
+        <Button fx:id="downloadButton" text="Scarica Video" onAction="#performDownload"/>
+    </HBox>
+    
+    <Label text="Nota: Inserisci un URL diretto al file video. Per YouTube, usa strumenti esterni per ottenere l'URL diretto." 
+           style="-fx-font-size: 10px; -fx-text-fill: #666666;" wrapText="true" maxWidth="520"/>
+</VBox>

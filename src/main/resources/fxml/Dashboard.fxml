@@ -7,5 +7,6 @@
       fx:controller="app.controller.DashboardController">
 
     <Button text="Converti File" onAction="#openConverter"/>
+    <Button text="Scarica Video" onAction="#openVideoDownloader"/>
 
 </VBox>
