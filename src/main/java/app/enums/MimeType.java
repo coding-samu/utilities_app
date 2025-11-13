@@ -4,6 +4,7 @@ import app.exception.ConversionErrorException;
 
 public enum MimeType {
     VIDEO_MP4("video/mp4", ".mp4"),
+    VIDEO_MKV("video/x-matroska", ".mkv"),
     AUDIO_MP3("audio/mpeg", ".mp3"),
     AUDIO_WAV("audio/wav", ".wav"),
     IMAGE_PNG("image/png", ".png"),
