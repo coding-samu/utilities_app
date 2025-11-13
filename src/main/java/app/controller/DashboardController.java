@@ -18,6 +18,11 @@ public class DashboardController extends GenericController {
         openUtilityWindow("ConverterUtility.fxml", "Converti File");
     }
 
+    public void openVideoPlayer() throws IOException {
+        LOGGER.info("Apertura della finestra video player");
+        openUtilityWindow("VideoPlayerUtility.fxml", "Video Player");
+    }
+
     private void openUtilityWindow(String fxmlFile, String title) throws IOException {
         LOGGER.info("Caricamento della finestra: {}", title);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/" + fxmlFile));

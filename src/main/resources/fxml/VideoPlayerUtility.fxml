@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.controller.VideoPlayerController" prefWidth="800" prefHeight="600">
+
+    <center>
+        <MediaView fx:id="mediaView" fitWidth="800" fitHeight="500"/>
+    </center>
+
+    <bottom>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Time slider -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Tempo:"/>
+                <Slider fx:id="timeSlider" HBox.hgrow="ALWAYS" min="0" max="100" value="0"/>
+                <Label fx:id="timeLabel" text="00:00 / 00:00" minWidth="100"/>
+            </HBox>
+
+            <!-- Control buttons -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Seleziona Video" onAction="#selectVideo"/>
+                <Button fx:id="playPauseButton" text="Play" onAction="#playPause"/>
+                <Button text="Stop" onAction="#stop"/>
+            </HBox>
+
+            <!-- Volume and speed controls -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="Volume:"/>
+                <Slider fx:id="volumeSlider" min="0" max="100" value="50" prefWidth="150"/>
+
+                <Label text="Velocità:"/>
+                <Slider fx:id="speedSlider" min="0.25" max="2.0" value="1.0" prefWidth="150" 
+                        majorTickUnit="0.25" minorTickCount="0" showTickLabels="true" showTickMarks="true"/>
+            </HBox>
+
+            <!-- Status label -->
+            <Label fx:id="statusLabel" text="Nessun video caricato" style="-fx-font-style: italic;"/>
+        </VBox>
+    </bottom>
+
+</BorderPane>
