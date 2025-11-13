@@ -17,6 +17,7 @@ public class ConverterRegistry {
         LOGGER.info("Inizializzazione del registro dei convertitori di file");
         converters.add(new Mp4ToMp3ConverterUtils());
         converters.add(new Mp4ToWavConverterUtils());
+        converters.add(new Mp4ToMkvConverterUtils());
         converters.add(new MkvToMp4ConverterUtils());
         converters.add(new PngToJpgConverterUtils());
         converters.add(new JpgToPngConverterUtils());
